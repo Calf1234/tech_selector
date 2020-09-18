@@ -53,7 +53,7 @@ def get_daily_makertData(code):
     if 'data' in content:
         data = content['data']
         if data is None:
-            utils.myprint(3, 'get_daily_makertData, data is None, code: %s, \nurl: %s' %(code, response.url))
+            utils.myprint(3, 'get_daily_makertData, data is None, code: %s, \nurl: %s' % (code, response.url))
     else:
         data = None
         utils.myprint(3, 'get_daily_makertData, no data in content, code: ' + code)
@@ -120,3 +120,44 @@ def get_stockInfomation(name):
     timestamp = utils.zixun_filterTime()
     return [info for info in infos if info.art_timestamp > timestamp]
 
+
+def get_stockReport(name):
+    '''获取个股资讯，根据指定股票名字来搜索
+
+    :param name:
+    :return:
+    '''
+
+    response = requests.get(
+        'http://searchapi.eastmoney.com/bussiness/Web/GetSearchList',
+        params={
+            'type': 501,
+            'pageindex': 1,  # 查询第几页
+            'pagesize': 10,  # 一页多少条资讯
+            'keyword': name,
+            'name': 'normal',
+            '_': datetime.now().timestamp()
+        },
+        headers={
+            'Referer': requests.get('http://so.eastmoney.com/Ann/s', params={'keyword': name}).url}
+    )
+
+    if response.status_code != 200:
+        utils.myprint(3, 'get_stockReport, http request error, status_code: ' + str(
+            response.status_code) + ', url: ' + response.url)
+        return None
+
+    content = response.content.decode('utf-8', errors='ignore')
+    utils.myprint(1, 'get_stockReport, http request, content: ' + content)
+
+    content = json.loads(content)
+    if not content['IsSuccess']:
+        utils.myprint(3, 'get_stockReport, http request, IsSuccess: False, so not Data')
+        return None
+
+    utils.myprint(2, 'get_stockReport, http request, name: ' + name + ', TotalPage: ' + str(
+        content['TotalPage']) + ', TotalCount: ' + str(content['TotalCount']))
+
+    infos = parse.data2stockReport(content['Data'])
+    timestamp = utils.yanbao_filterTime()
+    return [info for info in infos if info.report_timestamp > timestamp]

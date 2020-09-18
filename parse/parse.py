@@ -1,5 +1,5 @@
 from utils import utils
-from data import information, marketdata
+from data import information, marketdata, report
 import re
 
 
@@ -59,3 +59,32 @@ def data2stockInfo(data):
             re.sub(r'[</em><em>]', '', info['Art_Content'])
         ))
     return infos
+
+
+def data2stockReport(datas):
+    '''将 json形式的数据 转换成 list，list内元素是 stock_report类对象
+
+    :param data:
+    :return:
+    '''
+    reports = []
+    if datas is None:
+        return reports
+
+    for data in datas:
+        utils.myprint(2, 'data2stockReport, report: ' + str(data))
+
+        # { 个股研报的格式，来自响应内容的 "Data": Array[10]
+        #     'Title': '疫情导致业绩短期承压，5G放量依旧可期',
+        #     'PUBLISHDATE': '2020-08-27 00:00:00',
+        #     'Url': 'http://data.eastmoney.com/report/zw_stock.jshtml?encodeUrl=BmiolVIlr6KZkgoJQ09hBe8NSWD5/MhonF1FM3bjndI=',
+        #     'StockName': '<em>中新赛克</em>',
+        #     'INFOBODYCONTENT': ''}
+        reports.append(report.stock_report(
+            data['Title'],
+            data['PUBLISHDATE'],
+            data['Url'],
+            re.sub(r'[</em><em>]', '', data['StockName']),
+            data['INFOBODYCONTENT']
+        ))
+    return reports

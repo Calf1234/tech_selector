@@ -157,7 +157,9 @@ class operate(object):
 
         sql = 'select code, name from %s where ' % (self.table_followed_stocks)
         if len(kwargs) < 1:
-            sql += 'a_h = 1'
+            sql = 'select code, name from %s ' % (self.table_followed_stocks)
+        elif 'a_h' in kwargs:
+            sql += 'a_h = %d' % (kwargs['a_h'])
         elif 'group1' in kwargs:  # 马教授
             sql += 'group1 = %d' % (kwargs['group1'])
         elif 'group2' in kwargs:  # 科技类
@@ -190,7 +192,7 @@ class operate(object):
         stocks = cursor.fetchall()
         if len(stocks) > 0:
             sql = 'delete from %s where timestamp > %d' % (self.table_market_data, utils.get_current_day())
-            utils.myprint(1, 'delete_today_marketdata, sql: ' + sql)
+            utils.myprint(3, 'delete_today_marketdata, sql: ' + sql)
             cursor.execute(sql)
         else:
             utils.myprint(2, 'delete_today_marketdata, no data, its time > %s' % (

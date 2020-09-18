@@ -26,13 +26,63 @@
 
 ### 个股资讯
 
-个股资讯： http://so.eastmoney.com/News/s?keyword=%E5%85%B1%E8%BE%BE%E7%94%B5%E5%A3%B0
+```text
+资讯：
+
+URL： http://searchapi.eastmoney.com//bussiness/Web/GetCMSSearchList?type=8193&pageindex=1&pagesize=10&keyword=%E4%B8%AD%E6%96%B0%E8%B5%9B%E5%85%8B&name=zixun&cb=jQuery112403615392549975909_1600861889048&_=1600861889054
+
+Referer： http://so.eastmoney.com/news/s?keyword=%E4%B8%AD%E6%96%B0%E8%B5%9B%E5%85%8B
+
+查询字符串参数
+type: 8193
+pageindex: 1
+pagesize: 10
+keyword: 中新赛克
+name: zixun
+cb: jQuery112403615392549975909_1600861889048
+_: 1600861889054
+```
+
+
+```text
+研报：
+
+URL： http://searchapi.eastmoney.com/bussiness/Web/GetSearchList?type=501&pageindex=1&pagesize=10&keyword=%E4%B8%AD%E6%96%B0%E8%B5%9B%E5%85%8B&name=normal&cb=jQuery112404932609831625171_1600861560348&_=1600861560354
+
+Referer： http://so.eastmoney.com/Yanbao/s?keyword=%E4%B8%AD%E6%96%B0%E8%B5%9B%E5%85%8B
+
+查询字符串参数
+type: 501
+pageindex: 1
+pagesize: 10
+keyword: 中新赛克
+name: normal
+cb: jQuery112404932609831625171_1600861560348
+_: 1600861560354
+```
+
+
+```text
+公告：
+
+URL： http://searchapi.eastmoney.com/bussiness/Web/GetSearchList?type=401&pageindex=1&pagesize=10&keyword=%E4%B8%AD%E6%96%B0%E8%B5%9B%E5%85%8B&name=normal&cb=jQuery112406433602006857104_1600861701427&_=1600861701433
+
+Referer： http://so.eastmoney.com/Ann/s?keyword=%E4%B8%AD%E6%96%B0%E8%B5%9B%E5%85%8B
+
+查询字符串参数
+type: 401
+pageindex: 1
+pagesize: 10
+keyword: 中新赛克
+name: normal
+cb: jQuery112406433602006857104_1600861701427
+_: 1600861701433
+```
+
 
 大事提醒： http://data.eastmoney.com/stockcalendar/002655.html
 公司公告： http://data.eastmoney.com/notices/stock/002655.html
-
 行业资讯： http://stock.eastmoney.com/hangye/hy459.html
-
 
 ### 大事提醒
 

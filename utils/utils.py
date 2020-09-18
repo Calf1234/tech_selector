@@ -38,17 +38,37 @@ def myprint(level, *args):
     print(info)
 
 
+def yanbao_filterTime():
+    '''返回指定的过滤时间, 抓取最近七天的研报
+
+    :return:
+    '''
+
+    time = datetime.now()
+    time = time - timedelta(days=7, hours=time.hour, minutes=time.minute, seconds=time.second + 1)
+    return time.timestamp()
+
+
 def zixun_filterTime():
-    ''' 返回指定的过滤时间, 开盘前抓取资讯，要前一天往后的; 开盘后只看当天的资讯
+    ''' 返回指定的过滤时间, 开盘前抓取资讯，要前一天往后的;
+    若是周一开盘前，则要带有周末的资讯; 开盘后只看当天的资讯
 
     '''
 
     time = datetime.now()
-    if (time.hour < 10):
-        # 10点前抓当天和前一天的资讯内容
-        time = time - timedelta(days=1, hours=time.hour, minutes=time.minute)
+    if time.weekday() in [5, 6]:
+        # 若是周末，则抓周末
+        time = time - timedelta(days=(time.weekday() - 5), hours=time.hour, minutes=time.minute, seconds=time.second)
+    elif time.weekday() == 0 and time.hour < 10:
+        # 若是周一 且 10点前，则抓周末 + 周一
+        time = time - timedelta(days=2, hours=time.hour, minutes=time.minute, seconds=time.second)
+    elif time.hour < 10:
+        # 10点前，则抓前一天 + 现在
+        time = time - timedelta(days=1, hours=time.hour, minutes=time.minute, seconds=time.second)
     else:
-        time = time - timedelta(hours=time.hour, minutes=time.minute)
+        # 10点后抓，只抓当天的资讯
+        time = time - timedelta(hours=time.hour, minutes=time.minute, seconds=time.second)
+
     return time.timestamp()
 
 
@@ -59,5 +79,5 @@ def get_current_day():
     '''
 
     time = datetime.now()
-    time = time - timedelta(hours=time.hour, minutes=time.minute)
+    time = time - timedelta(hours=time.hour, minutes=time.minute, seconds=time.second)
     return time.timestamp()

@@ -21,7 +21,7 @@ class stock_information(object):
 
     @property
     def art_UniqueUrl(self):
-        return self.__art_UniqueUrl
+        return self._art_UniqueUrl
 
     @art_UniqueUrl.setter
     def art_UniqueUrl(self, Art_UniqueUrl):
