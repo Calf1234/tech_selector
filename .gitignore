@@ -2,3 +2,20 @@
 .idea/
 venv/
 
+data/__pycache__/*
+data/__init__.py
+
+database/__pycache__/*
+database/__init__.py
+
+display/__pycache__/*
+display/__init__.py
+
+network/__pycache__/*
+network/__init__.py
+
+parse/__pycache__/*
+parse/__init__.py
+
+utils/__pycache__/*
+utils/__init__.py
