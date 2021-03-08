@@ -3,6 +3,7 @@
 from database import db
 from network import net
 from parse import parse
+from data import techdata
 
 
 def print_stockReport(stocks, mark='关注的股票列表#研报'):
@@ -39,6 +40,9 @@ if __name__ == '__main__':
     print(">>>>> main" + "\n")
 
     opt = db.operate()
+    # net.get_kline('002912')
+    obj = net.get_stockComment('002912')
+    print(str(techdata.techdata_2_json(obj)))
 
     #####################################################
     # 1. 展示相关个股的资讯

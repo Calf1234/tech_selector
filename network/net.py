@@ -5,6 +5,7 @@ import requests
 
 from parse import parse
 from utils import utils
+from data import techdata
 
 
 def get_daily_makertData(code):
@@ -161,3 +162,59 @@ def get_stockReport(name):
     infos = parse.data2stockReport(content['Data'])
     timestamp = utils.yanbao_filterTime()
     return [info for info in infos if info.report_timestamp > timestamp]
+
+
+def get_kline(code):
+    '''根据股票代码来获取 K线图数据，默认是日K
+
+    :param code: 股票代码
+    :return:
+    '''
+
+    # 检查股票代码 code是否合法
+    response = requests.get(
+        url='http://push2his.eastmoney.com/api/qt/stock/kline/get?cb=?',
+        params={
+            # f1: 股票代码，f3：股票名字，f5：k线数据长度
+            'fields1': 'f1,f2,f3,f4,f5,f6',
+            # f51：时间，f52：开盘价，f53：收盘价，f54：最高价，f55：最低价
+            # f56：涨跌幅，f57：涨跌额，f58：成交量，f59：成交额，f60：振幅，f61：换手率
+            'fields2': 'f51,f52,f53,f54,f55,f56,f57,f58,f59,f60,f61',
+            'ut': '7eea3edcaed734bea9cbfc24409ed989',
+            'klt': '101',
+            'fqt': '0',
+            'secid': '0.002912',
+            'beg': 0,
+            'end': 20500000,
+            '_': datetime.now().timestamp()
+        })
+    print(response.content.decode('utf-8', errors='ignore'))
+
+
+def get_stockComment(code):
+    '''结合千股千评来爬取个股的相关数据，主要是技术指标数据
+
+    :return:
+    '''
+
+    # 检查股票代码 code是否合法
+    response = requests.get(
+        url='http://data.eastmoney.com/stockcomment/API/%s.json' % (str(code)),
+        headers={
+            'Referer': 'http://data.eastmoney.com/stockcomment/stock/%s.html' % (str(code))
+        }
+    )
+    print(response.content.decode('utf-8', errors='ignore'))
+
+    if (response.status_code != 200):
+        print('status_code not 200 %s' %(str(response.status_code)))
+
+    try:
+        # 提取技术指标数据，如MACD，BOLL，KDJ等
+        data = json.loads(response.content.decode('utf-8', errors='ignore'))['ApiResults']['zj']['Trend'][2][0]
+    except:
+        print('error, format data: {%s} to json' %(response.content.decode('utf-8', errors='ignore')))
+    finally:
+        print(str(data))
+        return json.loads(str(json.dumps(data)), object_hook=techdata.json_2_techdata)
+
